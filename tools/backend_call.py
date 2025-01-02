@@ -123,7 +123,7 @@ def main(image_path):
     conf_thresh = 0.25
     nms_thresh = 0.45
     tsize = 640
-    device = "gpu"
+    device = "cpu"  # cpu
     ckpt_path = "app/detect_model/YOLOX/yolox_s.pth"
     
     print("1")
