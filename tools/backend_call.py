@@ -73,34 +73,34 @@ class Predictor(object):
 
     def inference(self, img):
         img_info = {"id": 0}
-        #print("4,2")
+
         img = str(img)
         if isinstance(img, str):
             img_info["file_name"] = os.path.basename(img)
             img = cv2.imread(img)
-            #print("4,3")
+
         else:
             img_info["file_name"] = None
-            #print("4,4")
 
-        print("img: ", img.shape)
+
+
         height, width = img.shape[:2]
         img_info["height"] = height
         img_info["width"] = width
         img_info["raw_img"] = img
         
-        #print("4,5")
+
 
         ratio = min(self.test_size[0] / img.shape[0], self.test_size[1] / img.shape[1])
         img_info["ratio"] = ratio
         
-        #print("4,6")
+
 
         img, _ = self.preproc(img, None, self.test_size)
         img = torch.from_numpy(img).unsqueeze(0)
         img = img.float()
         
-        #print("4,7")
+
         if self.device == "gpu":
             img = img.cuda()
             if self.fp16:
@@ -126,7 +126,7 @@ def main(image_path):
     device = "cpu"  # cpu
     ckpt_path = "app/detect_model/YOLOX/yolox_s.pth"
     
-    print("1")
+
 
     exp = get_exp(exp_file, model_name)
 
@@ -134,7 +134,7 @@ def main(image_path):
     exp.nmsthre = nms_thresh
     exp.test_size = (tsize, tsize)
     
-    print("2")
+
 
     model = exp.get_model()
 
@@ -142,7 +142,7 @@ def main(image_path):
         model.cuda()
     model.eval()
     
-    print("3")
+
 
     ckpt = torch.load(ckpt_path, map_location="cpu")
     model.load_state_dict(ckpt["model"])
@@ -151,15 +151,12 @@ def main(image_path):
         model, exp, COCO_CLASSES, None, None, device, False, False
     )
     
-    print("4")
     
     resize_image(image_path, image_path)
     
-    print("4,1", image_path, type(image_path))
 
     outputs, img_info = predictor.inference(image_path)
     
-    print("5")
 
     # Extract bounding boxes for class "person"
     person_bboxes = []
@@ -174,4 +171,3 @@ def main(image_path):
 # Example usage from another script
 if __name__ == "__main__":
     result = main("assets/CCCD_smaller.jpg")
-    print("Detected bounding boxes:", result)
