@@ -120,7 +120,7 @@ def main(image_path):
     # Load the experiment and model configuration
     exp_file = None
     model_name = "yolox-s"
-    conf_thresh = 0.25
+    conf_thresh = 0.83
     nms_thresh = 0.45
     tsize = 640
     device = "cpu"  # cpu
